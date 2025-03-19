@@ -1,0 +1,100 @@
+11. Implement a C program to perform symbol table operations.
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>	
+
+int cnt=0;
+struct symtab
+{
+	char label[20]; 
+	int addr;
+} sy[50]; 
+
+void insert(const char *lab, int address);
+int search(const char *); 
+void display(); 
+void modify(const char *lab, int new_address); 
+
+int main()
+{
+	// Predefined symbol table entries
+	insert("START", 1000);
+	insert("LOOP", 1004);
+	insert("END", 1010);
+
+	printf("\nSymbol Table after predefined insertions:\n");
+	display();
+
+	// Searching for an existing symbol
+	const char *search_label = "LOOP";
+	printf("\nSearching for label: %s\n", search_label);
+	if (search(search_label))
+		printf("Label is found\n");
+	else
+		printf("Label is not found\n");
+
+	// Modifying an existing symbol
+	printf("\nModifying label: LOOP to new address 2000\n");
+	modify("LOOP", 2000);
+	display();
+
+	// Searching for a non-existing symbol
+	const char *search_label2 = "MISSING";
+	printf("\nSearching for label: %s\n", search_label2);
+	if (search(search_label2))
+		printf("Label is found\n");
+	else
+		printf("Label is not found\n");
+
+	return 0;
+}
+
+void insert(const char *lab, int address)
+{
+	int val = search(lab); 
+	if(val==1)
+		printf("Duplicate symbol: %s\n", lab);
+	else
+	{
+		strcpy(sy[cnt].label, lab); 
+		sy[cnt].addr = address;
+		cnt++;
+	}
+}
+
+int search(const char *s)
+{
+	int flag=0, i;
+	for(i=0; i<cnt; i++)
+	{
+		if(strcmp(sy[i].label, s) == 0)
+			flag = 1;
+	}
+	return flag;
+}
+
+void modify(const char *lab, int new_address)
+{
+	int val, i; 
+	val = search(lab); 
+	if(val==0)
+		printf("No such symbol: %s\n", lab);
+	else
+	{
+		for(i=0; i<cnt; i++)
+		{
+			if(strcmp(sy[i].label, lab) == 0)
+				sy[i].addr = new_address;
+		}
+	}
+}
+
+void display()
+{
+	int i; 
+	printf("\nSymbol Table:\n");
+	printf("Label\tAddress\n");
+	for(i=0; i<cnt; i++)
+		printf("%s\t%d\n", sy[i].label, sy[i].addr);
+}
