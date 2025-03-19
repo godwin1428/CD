@@ -1,0 +1,33 @@
+6. Develop a lexical Analyzer to test whether a given identifier is valid or not using C.
+
+#include<stdio.h>
+#include<ctype.h>
+
+int main()
+{
+    char a[] = "valid123"; 
+    int flag, i = 1;
+    
+    if(isalpha(a[0]))
+        flag = 1;
+    else
+    {
+        printf("\nNot a valid identifier");
+        return 0;
+    }
+    
+    while(a[i] != '\0')
+    {
+        if(!isdigit(a[i]) && !isalpha(a[i]))
+        {
+            flag = 0;
+            break;
+        }
+        i++;
+    }
+    
+    if(flag == 1)
+        printf("\nValid identifier");
+    
+    return 0;
+}
