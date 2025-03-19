@@ -1,0 +1,103 @@
+8. Write a C program to find FOLLOW( ) - predictive parser for the given grammar
+S → AaAb / BbBa
+A → ∈
+B → ∈
+
+#include<stdio.h>
+#include<ctype.h>
+#include<string.h>
+
+int limit, x = 0;
+char production[10][10] = {"S=AaAb","S=BbBa","A=$","B=$"}, array[10];
+
+void find_first(char ch);
+void find_follow(char ch);
+void Array_Manipulation(char ch);
+
+int main()
+{
+    int count;
+    char ch;
+    limit = 4; // Number of productions
+    char symbols[] = {'S', 'A', 'B'};
+
+    for (int i = 0; i < 3; i++) {
+        x = 0;
+        ch = symbols[i];
+        find_follow(ch);
+        printf("\nFollow(%c) = { ", ch);
+        for (count = 0; count < x; count++) {
+            printf("%c ", array[count]);
+        }
+        printf("}\n");
+    }
+    return 0;
+}
+
+void find_follow(char ch)
+{
+    int i, j;
+    int length;
+    if(production[0][0] == ch)
+    {
+        Array_Manipulation('$');
+    }
+    for(i = 0; i < limit; i++)
+    {
+        length = strlen(production[i]);
+        for(j = 2; j < length; j++)
+        {
+            if(production[i][j] == ch)
+            {
+                if(production[i][j + 1] != '\0')
+                {
+                    find_first(production[i][j + 1]);
+                }
+                if(production[i][j + 1] == '\0' && ch != production[i][0])
+                {
+                    find_follow(production[i][0]);
+                }
+            }
+        }
+    }
+}
+
+void find_first(char ch)
+{
+    int i, k;
+    if(!(isupper(ch)))
+    {
+        Array_Manipulation(ch);
+    }
+    for(k = 0; k < limit; k++)
+    {
+        if(production[k][0] == ch)
+        {
+            if(production[k][2] == '$')
+            {
+                find_follow(production[k][0]);
+            }
+            else if(islower(production[k][2]))
+            {
+                Array_Manipulation(production[k][2]);
+            }
+            else
+            {
+                find_first(production[k][2]);
+            }
+        }
+    }
+}
+
+void Array_Manipulation(char ch)
+{
+    int count;
+    for(count = 0; count < x; count++)
+    {
+        if(array[count] == ch)
+        {
+            return;
+        }
+    }
+    array[x++] = ch;
+}
