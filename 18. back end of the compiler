@@ -1,0 +1,33 @@
+18. Write a C program to implement the back end of the compiler. 
+
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    // Input is provided directly in the code
+    int n = 2; // Number of intermediate codes
+    char a[2][6] = {"a=b+c", "d=n*d"}; // 3-address codes
+
+    printf("The intermediate codes are:\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d: %s\n", i + 1, a[i]);
+    }
+
+    printf("\nThe generated code is:\n");
+    for (int i = 0; i < n; i++) {
+        printf("\n mov %c,R%d", a[i][2], i); // Move second operand to register
+        if (a[i][3] == '+') {
+            printf("\n add %c,R%d", a[i][4], i); // Perform addition
+        } else if (a[i][3] == '*') {
+            printf("\n mul %c,R%d", a[i][4], i); // Perform multiplication
+        } else if (a[i][3] == '-') {
+            printf("\n sub %c,R%d", a[i][4], i); // Perform subtraction
+        } else if (a[i][3] == '/') {
+            printf("\n div %c,R%d", a[i][4], i); // Perform division
+        }
+        printf("\n mov R%d,%c", i, a[i][0]); // Move result to destination
+        printf("\n");
+    }
+
+    return 0;
+}
