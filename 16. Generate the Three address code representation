@@ -1,0 +1,59 @@
+16. Write a C Program to Generate the Three address code representation for the given input 
+statement. 
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct three {
+    char data[10], temp[7];
+} s[30];
+
+int main() {
+    char d1[7], d2[7] = "t";
+    int i = 0, j = 1, len = 0;
+
+    // Input is provided directly in the code
+    char input[] = "out = in1 + in2 + in3 - in4";
+    printf("Input: %s\n", input); // Print the input statement
+
+    // Tokenize the input and store in the array
+    char *token = strtok(input, " ");
+    while (token != NULL) {
+        strcpy(s[len].data, token);
+        len++;
+        token = strtok(NULL, " ");
+    }
+
+    // Generate three-address code
+    itoa(j, d1, 10);
+    strcat(d2, d1);
+    strcpy(s[j].temp, d2);
+    strcpy(d1, "");
+    strcpy(d2, "t");
+
+    if (!strcmp(s[3].data, "+")) {
+        printf("%s=%s+%s\n", s[j].temp, s[2].data, s[4].data);
+        j++;
+    } else if (!strcmp(s[3].data, "-")) {
+        printf("%s=%s-%s\n", s[j].temp, s[2].data, s[4].data);
+        j++;
+    }
+
+    for (i = 4; i < len - 2; i += 2) {
+        itoa(j, d1, 10);
+        strcat(d2, d1);
+        strcpy(s[j].temp, d2);
+        if (!strcmp(s[i + 1].data, "+"))
+            printf("%s=%s+%s\n", s[j].temp, s[j - 1].temp, s[i + 2].data);
+        else if (!strcmp(s[i + 1].data, "-"))
+            printf("%s=%s-%s\n", s[j].temp, s[j - 1].temp, s[i + 2].data);
+        strcpy(d1, "");
+        strcpy(d2, "t");
+        j++;
+    }
+
+    printf("%s=%s\n", s[0].data, s[j - 1].temp);
+
+    return 0;
+}
