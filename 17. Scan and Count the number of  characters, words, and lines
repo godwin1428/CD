@@ -1,0 +1,35 @@
+17. Write a C program for implementing a Lexical Analyzer to Scan and Count the number of 
+characters, words, and lines in a file.
+
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char str[] = "void main()\n{\nint a;\nint b;\na = b + c;\nc = d * e;\n}\n";
+
+    int words = 0, newline = 0, characters = 0;
+
+    printf("Input:\n%s\n", str);
+
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == ' ') {
+            words++;
+        } else if (str[i] == '\n') {
+            newline++;
+            words++;
+        } else if (str[i] != ' ' && str[i] != '\n') {
+            characters++;
+        }
+    }
+
+    if (characters > 0) {
+        words++;
+        newline++;
+    }
+
+    printf("Total number of words: %d\n", words);
+    printf("Total number of lines: %d\n", newline);
+    printf("Total number of characters: %d\n", characters);
+
+    return 0;
+}
