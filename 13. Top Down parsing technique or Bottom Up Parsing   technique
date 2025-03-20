@@ -1,0 +1,45 @@
+13. Write a C program to implement either Top Down parsing technique or Bottom Up Parsing  
+technique to check whether the given input string  is satisfying the grammar or not.
+
+#include<stdio.h>
+#include<string.h>
+
+int main() {
+    printf("The grammar is: S->aS, S->Sb, S->ab\n");
+    
+    // Predefined test cases
+    const char *test_cases[] = {"abb", "aab", "aaaabb", "aabb", "ab"};
+    int num_tests = sizeof(test_cases) / sizeof(test_cases[0]);
+    
+    for (int t = 0; t < num_tests; t++) {
+        char string[50];
+        strcpy(string, test_cases[t]);
+        int flag = 0, count;
+        
+        printf("\nTesting input: %s\n", string);
+        
+        if (string[0] == 'a') {
+            flag = 0;
+            for (count = 1; string[count] != '\0'; count++) {
+                if (string[count] == 'b') {
+                    flag = 1;
+                    continue;
+                } else if (flag == 1 && string[count] == 'a') {
+                    printf("The string does not belong to the specified grammar\n");
+                    break;
+                } else if (string[count] == 'a') {
+                    continue;
+                } else {
+                    printf("String accepted\n");
+                    break;
+                }
+            }
+            if (flag == 1 && string[count] == '\0') {
+                printf("String accepted\n");
+            }
+        } else {
+            printf("String not accepted…..!!!!\n");
+        }
+    }
+    return 0;
+}
