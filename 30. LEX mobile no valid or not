@@ -1,0 +1,22 @@
+30.Implement a LEX program to check whether the mobile number is valid or not. 
+
+mobile.l
+
+%{
+#include <stdio.h>
+%}
+
+%%
+^[6-9][0-9]{9}$  { printf("Valid Mobile Number: %s\n", yytext); }
+.*  { printf("Invalid Mobile Number: %s\n", yytext); }
+%%
+
+int main() {
+    printf("Enter a mobile number: ");
+    yylex();
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
