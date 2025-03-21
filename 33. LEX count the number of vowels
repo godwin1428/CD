@@ -1,0 +1,36 @@
+33.Write a LEX program to count the number of vowels in the given sentence.
+
+onlyvowels.l
+
+%{
+    #include <stdio.h>
+
+    int vow_count = 0;
+    char text[] = "Hello, this is a test sentence!";  
+%}
+
+%%
+
+[aeiouAEIOU] {  
+    printf("%c ", yytext[0]);  
+    vow_count++;
+}  
+
+.|\n { /* Ignore everything else */ }  
+
+%%
+
+int yywrap() {
+    return 1;
+}
+
+int main() {
+    printf("Input String: %s\n", text);
+    printf("Vowels found: ");
+    
+    yy_scan_string(text);
+    yylex();
+    
+    printf("\nTotal Number of Vowels: %d\n", vow_count);
+    return 0;
+}
