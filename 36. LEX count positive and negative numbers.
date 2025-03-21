@@ -1,0 +1,32 @@
+36. Write a LEX program to identify and count positive and negative numbers.
+
+posnegnum.l
+
+%{
+#include<stdio.h>
+#include<string.h>
+extern int yylex();
+int positive_no=0,negative_no=0;
+%}
+%%
+-?[0-9]+ { 
+    if(yytext[0]=='-') {
+        negative_no++; 
+        printf("negative number=%s\n", yytext);
+    } else { 
+        positive_no++; 
+        printf("positive number=%s\n", yytext);
+    }
+}
+[ \t\n]+ ;
+%%
+int yywrap() { return 1; }
+int main() {
+    char input[] = "15 -6 -9 -8 -7 -5 25";
+    printf("Input: %s\n", input);
+    yy_scan_string(input);
+    yylex();
+    printf("Number of positive numbers=%d\n", positive_no);
+    printf("Number of negative numbers=%d\n", negative_no);
+    return 0;
+}
