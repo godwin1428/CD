@@ -1,0 +1,53 @@
+25.Write a LEX program which adds line numbers to the given C program file and display the 
+same in the standard output. 
+
+sample.c
+
+#define PI 3.14    
+#include<stdio.h>  
+#include<conio.h> 
+void main() 
+{ 
+int a,b,c = 30; 
+printf("hello"); 
+}
+
+addlinenos.l
+
+%{
+#include <stdio.h>
+int yylineno = 0;
+extern FILE *yyin;
+%}
+
+%%
+
+.*\n { printf("%4d\t%s", ++yylineno, yytext); }
+
+%%
+
+int yywrap(void) {
+    return 1;
+}
+
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        printf("Usage: %s <filename>\n", argv[0]);
+        return 1;
+    }
+
+    yyin = fopen(argv[1], "r");
+    if (!yyin) {
+        printf("Error opening file: %s\n", argv[1]);
+        return 1;
+    }
+
+    yylex();
+    fclose(yyin);
+    return 0;
+}
+
+output
+flex addlinenos.l
+gcc lex.yy.c
+a.exe sample.c
