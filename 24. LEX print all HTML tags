@@ -1,0 +1,51 @@
+24. Write a LEX program to print all HTML tags in the input file.
+
+sample.html
+
+<html> 
+<body> 
+<h1>My First Heading</h1> 
+<p>My first paragraph.</p> 
+</body> 
+</html>
+
+html.l
+
+%{
+#include <stdio.h>
+int tags = 0;
+extern FILE *yyin;
+%}
+
+%%
+
+"<"[^>]+">" { tags++; printf("%s\n", yytext); }
+.|\n { }
+
+%%
+
+int yywrap(void) {
+    return 1;
+}
+
+int main(void) {
+    FILE *f;
+    char file[20];
+    printf("Enter File Name: ");
+    scanf("%s", file);
+    f = fopen(file, "r");
+    if (!f) {
+        printf("Error opening file\n");
+        return 1;
+    }
+    yyin = f;
+    yylex();
+    printf("\nNumber of HTML tags: %d\n", tags);
+    fclose(f);
+    return 0;
+}
+
+output
+flex html.l
+gcc lex.yy.c
+a.exe
