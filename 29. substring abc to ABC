@@ -1,0 +1,22 @@
+29. Write a LEX Program to convert the substring abc to ABC from the given input string 
+
+substring.l
+
+%{
+    #include <stdio.h>
+%}
+
+%%
+abc   { printf("ABC"); }  // Replace "abc" with "ABC"
+.|\n  { printf("%s", yytext); }  // Print all other characters as is
+%%
+
+int yywrap() {
+    return 1;
+}
+
+int main() {
+    printf("Enter Input String: ");
+    yylex();
+    return 0;
+}
