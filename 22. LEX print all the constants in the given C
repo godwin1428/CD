@@ -1,0 +1,55 @@
+22.Write a LEX program to print all the constants in the given C source program file.
+
+sample.c
+
+#define P 314
+#include<stdio.h>
+#include<conio.h>
+void main(){
+	int a,b,c=30;
+	printf("hello");
+}
+
+countconstants.l
+
+%{
+#include <stdio.h>
+int cons=0;
+extern FILE *yyin;
+%}
+
+digit [0-9]+
+
+%%
+
+{digit} { cons++; printf("%s is a constant\n", yytext); }
+.|\n { }
+
+%%
+
+int yywrap(void) {
+    return 1;
+}
+
+int main(void) {
+    FILE *f;
+    char file[20];
+    printf("Enter File Name: ");
+    scanf("%s", file);
+    f = fopen(file, "r");
+    if (!f) {
+        printf("Error opening file\n");
+        return 1;
+    }
+    yyin = f;
+    yylex();
+    printf("Number of Constants: %d\n", cons);
+    fclose(f);
+    return 0;
+}
+
+output:
+flex countconstants.l
+gcc lex.yy.c
+a.exe
+sample.c
