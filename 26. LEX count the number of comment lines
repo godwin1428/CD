@@ -1,0 +1,76 @@
+26. Write a LEX program to count the number of comment lines in a given C program and 
+eliminate them and write into another file.
+
+input.c
+#include<stdio.h>  
+int main() 
+{ 
+int a,b,c; /*varible declaration*/ 
+printf(“enter two numbers”); 
+scanf(“%d %d”,&a,&b); 
+c=a+b;//adding two numbers 
+printf(“sum is %d”,c); 
+return 0; 
+} 
+
+comment.c
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+int com = 0; // Counter for comments
+extern FILE *yyin, *yyout;
+%}
+
+%s COMMENT
+
+%%
+
+"/*"     { BEGIN(COMMENT); }
+<COMMENT>"*/" { BEGIN(0); com++; }
+<COMMENT>\n    { com++; }
+<COMMENT>.     { }
+"//".*         { com++; }
+
+.|\n          { fprintf(yyout, "%s", yytext); }
+
+%%
+
+int yywrap() {
+    return 1;
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        printf("Usage: %s <input file> <output file>\n", argv[0]);
+        return 1;
+    }
+
+    yyin = fopen(argv[1], "r");
+    if (!yyin) {
+        printf("Error opening input file: %s\n", argv[1]);
+        return 1;
+    }
+
+    yyout = fopen(argv[2], "w");
+    if (!yyout) {
+        printf("Error opening output file: %s\n", argv[2]);
+        fclose(yyin);
+        return 1;
+    }
+
+    yylex();
+
+    printf("\nNumber of comment lines = %d\n", com);
+
+    fclose(yyin);
+    fclose(yyout);
+
+    return 0;
+}
+
+output
+flex comment.l
+gcc lex.yy.c
+a.exe input26.c output26.c
