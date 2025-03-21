@@ -1,0 +1,20 @@
+37. Write a LEX program to validate the URL. 
+
+%{
+#include<stdio.h>
+#include<string.h>
+extern int yylex();
+%}
+%%
+((http)|(ftp))s?:\/\/[a-zA-Z0-9]+(.[a-zA-Z0-9+=?]*)* {printf("\nInput: %s\nURL Valid\n", yytext);}
+.+ {printf("\nInput: %s\nURL Invalid\n", yytext);}
+%%
+int yywrap() { return 1; }
+int main() {
+    char input[][50] = { "https:\\\\www.sse.in", "https://www.sse.in" };
+    for (int i = 0; i < 2; i++) {
+        yy_scan_string(input[i]);
+        yylex();
+    }
+    return 0;
+}
